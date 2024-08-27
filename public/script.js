@@ -143,15 +143,12 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Add responsiveness to subHeading text dimension
       function applyResponsiveClassSubHeading() {
-        if (window.innerWidth >= 1024) {
-          subHeading.classList.add('text-4xl');
-          subHeading.classList.remove('text-2xl', 'text-sm');
-        } else if (window.innerWidth >= 768) {
+        if (window.innerWidth >= 768) {
           subHeading.classList.add('text-2xl');
-          subHeading.classList.remove('text-4xl', 'text-sm');
+          subHeading.classList.remove('text-sm');
         } else {
           subHeading.classList.add('text-sm');
-          subHeading.classList.remove('text-4xl', 'text-2xl');
+          subHeading.classList.remove('text-2xl');
         }
       }
       // Apply responsive classes on page load
