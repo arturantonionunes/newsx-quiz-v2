@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         img.alt = article.altTextImg;
         img.dataset.id = article.id;
         singleImgContainer.appendChild(img);
+        img.style.cursor = 'pointer';
         imagesContainer.appendChild(singleImgContainer)
 
         //Add event listener for each image, so that when an image is clicked the previous card disappear and the one which has been clicked will be shown.
