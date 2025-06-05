@@ -124,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Store current article to use it later for headline and subheading
     currentArticle = article;
+    updateArticleURL(article.id);
   }
 
 
