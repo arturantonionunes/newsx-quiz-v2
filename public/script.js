@@ -91,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function that dynamically updates the card info with all the info of the article
   function updateCard(article) {
+    currentArticleIndex = articles.findIndex(a => a.id === article.id);
     //Update Image Card
     const imgCardDiv = document.getElementById("imgCardContainer");
     imgCardDiv.innerHTML = "";
