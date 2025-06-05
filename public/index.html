@@ -289,6 +289,23 @@
   </footer>
 
   <script src="/script.js"></script>
+  <script>
+// Funções atualizadas para compartilhar a URL atual (que contém o ID único)
+function shareOnFacebook() {
+  const url = window.location.href; // Já contém o ID
+  const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  window.open(shareUrl, '_blank', 'width=600,height=400');
+}
+
+function shareOnTwitter() {
+  const url = window.location.href; // Já contém o ID
+  const text = document.title;
+  const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+  window.open(shareUrl, '_blank', 'width=600,height=400');
+}
+
+// ... atualizar demais funções de compartilhamento da mesma forma ...
+</script>
 </body>
 
 </html>
