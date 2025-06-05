@@ -18,46 +18,39 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("/data/articles.json")
     .then(response => response.json())
     .then(data => {
+      // Mantemos o array original para navegação
       articles = data;
-      console.log(articles);
       
-    // Verificar se há ID na URL
+      // Criamos uma cópia invertida apenas para o menu
+      const reversedArticles = [...data].reverse();
+      
+      // Verificar se há ID na URL
       const urlParams = new URLSearchParams(window.location.search);
       const articleIdFromUrl = urlParams.get('id');
 
       let initialArticle = null;
-      let initialIndex = 0;
       
       // Se houver ID na URL, encontrar artigo correspondente
       if (articleIdFromUrl) {
-        initialArticle = articles.find(article => article.id == articleIdFromUrl);
-        
-        // Se encontrou o artigo, obter seu índice
-        if (initialArticle) {
-          initialIndex = articles.findIndex(article => article.id == articleIdFromUrl);
-        }
+        // Procurar em ambos os arrays (original e invertido)
+        initialArticle = data.find(article => article.id == articleIdFromUrl) || 
+                       reversedArticles.find(article => article.id == articleIdFromUrl);
       }
       
-      // Se não encontrou, usar o último artigo
+      // Se não encontrou, usar o último artigo do array original
       if (!initialArticle) {
-        initialArticle = articles[articles.length - 1];
-        initialIndex = articles.length - 1;
+        initialArticle = data[data.length - 1];
       }
 
-      currentArticleIndex = initialIndex;
+      // Encontrar o índice no array original
+      currentArticleIndex = data.findIndex(article => article.id === initialArticle.id);
+      
+      // Atualizar o card
       updateCard(initialArticle);
 
+      imagesContainer.innerHTML = "";
 
-      const imagesContainer = document.getElementById("imagesContainer");
-
-      //Generate first CardGuessTheHeadline when page is open
-
-      const lastArticle = articles[articles.length - 1];
-      updateCard(lastArticle)
-
-      // Iterate through each element in the json file and print a small image on the page as a menu
-      articles.reverse().forEach((article, index) => {
-
+      reversedArticles.forEach((article) => {
         const singleImgContainer = document.createElement('div');
         singleImgContainer.classList.add('single-image-container-menu');
 
@@ -69,13 +62,15 @@ document.addEventListener("DOMContentLoaded", () => {
         img.style.cursor = 'pointer';
         imagesContainer.appendChild(singleImgContainer)
 
-        //Add event listener for each image, so that when an image is clicked the previous card disappear and the one which has been clicked will be shown.
         img.addEventListener('click', () => {
-          currentArticleIndex = index;
-          updateCard(article);
-          headlineText.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Encontrar o artigo no array original
+          const targetArticle = articles.find(a => a.id == article.id);
+          if (targetArticle) {
+            currentArticleIndex = articles.findIndex(a => a.id == article.id);
+            updateCard(targetArticle);
+            headlineText.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         });
-
       });
     })
     .catch(error => console.error('Error fetching articles:', error));
@@ -91,6 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function that dynamically updates the card info with all the info of the article
   function updateCard(article) {
+ const actualArticle = articles.find(a => a.id === article.id) || article;
+  
+  // Atualizar o índice
+  currentArticleIndex = articles.findIndex(a => a.id === actualArticle.id);
     currentArticleIndex = articles.findIndex(a => a.id === article.id);
     //Update Image Card
     const imgCardDiv = document.getElementById("imgCardContainer");
@@ -151,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Store current article to use it later for headline and subheading
     currentArticle = article;
-    updateArticleURL(article.id);
+     updateArticleURL(actualArticle.id);
   }
 
 
@@ -308,7 +307,21 @@ function updateArticleURL(articleId) {
   const newUrl = `${window.location.origin}${window.location.pathname}?id=${articleId}`;
   window.history.pushState({ articleId }, '', newUrl);
 }
+function nextArticle() {
+  let nextIndex = currentArticleIndex + 1;
+  if (nextIndex >= articles.length) {
+    nextIndex = 0;
+  }
+  updateCard(articles[nextIndex]);
+}
 
+function previousArticle() {
+  let prevIndex = currentArticleIndex - 1;
+  if (prevIndex < 0) {
+    prevIndex = articles.length - 1;
+  }
+  updateCard(articles[prevIndex]);
+}
 
 //Add favicon
 //Social media buttons make sure they work
