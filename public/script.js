@@ -20,7 +20,26 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => {
       articles = data;
       console.log(articles);
+      
+      // Verificar se há ID na URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleIdFromUrl = urlParams.get('id');
 
+    let initialArticle = null;
+    
+    // Se houver ID na URL, encontrar artigo correspondente
+    if (articleIdFromUrl) {
+      initialArticle = articles.find(article => article.id == articleIdFromUrl);
+    }
+    
+    // Se não encontrou, usar o último artigo
+    if (!initialArticle) {
+      initialArticle = articles[articles.length - 1];
+    }
+
+    // Encontrar o índice do artigo inicial
+    currentArticleIndex = articles.findIndex(article => article.id === initialArticle.id);
+    updateCard(initialArticle);
 
       const imagesContainer = document.getElementById("imagesContainer");
 
