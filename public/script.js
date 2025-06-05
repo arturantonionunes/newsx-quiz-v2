@@ -276,7 +276,10 @@ function shareByEmail() {
   const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   window.location.href = mailtoUrl;
 }
-
+function updateArticleURL(articleId) {
+  const newUrl = `${window.location.origin}${window.location.pathname}?id=${articleId}`;
+  window.history.pushState({ articleId }, '', newUrl);
+}
 
 
 //Add favicon
